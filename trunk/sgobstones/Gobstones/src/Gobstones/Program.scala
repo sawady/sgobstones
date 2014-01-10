@@ -5,6 +5,7 @@ import java.awt.Color
 import java.awt.Graphics2D
 import java.awt.Rectangle
 import java.awt.RenderingHints
+
 import scala.swing.BorderPanel
 import scala.swing.BoxPanel
 import scala.swing.Dimension
@@ -16,12 +17,18 @@ import scala.swing.Panel
 import scala.swing.SimpleSwingApplication
 import scala.swing.TabbedPane
 import scala.swing.TabbedPane.Page
-import javax.swing.border.LineBorder
+import scala.swing.event
+import scala.swing.event.KeyPressed
+
 import javax.swing.ImageIcon
+import javax.swing.border.LineBorder
 
 trait Program extends SimpleSwingApplication with Gobstones {
 
+  val Key = event.Key
+
   var interactivo = false
+  var codificaciones = false
   var showCoords = true
 
   val windowSize = new Dimension(600, 600)
@@ -29,6 +36,8 @@ trait Program extends SimpleSwingApplication with Gobstones {
   val windowsHeight = windowSize.getHeight().toInt
   val cellWidth = windowsWidth / width
   val cellHeight = windowsHeight / height
+
+  val initialBoard = resultPanel()
 
   private def toSwingColor(c: Color): java.awt.Color = c match {
     case Rojo => new java.awt.Color(242, 109, 109)
@@ -95,7 +104,7 @@ trait Program extends SimpleSwingApplication with Gobstones {
     focusable = true
     0 to height - 1 foreach { j =>
       0 to width - 1 foreach { i =>
-        if (interactivo) {
+        if (codificaciones) {
           contents += newImageCell(checkCode(i, j))
         } else {
           contents += newGobstonesCell(i, j)
@@ -144,7 +153,7 @@ trait Program extends SimpleSwingApplication with Gobstones {
     }
   }
 
-  private def boardPanel(b: Panel) = {
+  private def resultPanel() = {
     new BorderPanel() {
       if (showCoords) {
         add(yLabels(), BorderPanel.Position.West)
@@ -156,26 +165,61 @@ trait Program extends SimpleSwingApplication with Gobstones {
         add(emptyGridEast(), BorderPanel.Position.East)
         add(emptyGridNorth(), BorderPanel.Position.North)
       }
-      add(b, BorderPanel.Position.Center)
+      add(newBoardPanel(), BorderPanel.Position.Center)
     }
   }
 
-  def cambiarAInteractivo() {
-    interactivo = !interactivo
+  def onKeyPress(key: Key.Value) {}
+
+  def defaultKeyPress(key: Key.Value) {
+    println("Se presiono: " + key)
+    key match {
+      case Key.F10 => volverInteractivo()
+      case Key.F11 => ocultarCoordenadas()
+      case Key.F12 => verCodificaciones()
+      case _ => {}
+    }
+    onKeyPress(key)
+    resultPage.content = resultPanel()
   }
 
-  def mostrarCoordenadas(b: Boolean) {
-    showCoords = b
+  def volverInteractivo() {
+    if (!interactivo) {
+      tabPanels.selection.index = 1
+      tabPanels.pages.remove(0)
+      ocultarCoordenadas()
+      verCodificaciones()
+      interactivo = true
+    }
+  }
+
+  def verCodificaciones() {
+    codificaciones = !codificaciones
+  }
+
+  def ocultarCoordenadas() {
+    showCoords = !showCoords
+  }
+
+  main()
+  val initialPage = new Page("Tablero Inicial", initialBoard)
+  val resultPage = new Page("Resultado", resultPanel())
+  val tabPanels = new TabbedPane {
+    pages += initialPage
+    pages += resultPage
+    focusable = true
+    listenTo(keys)
+    reactions += {
+      case KeyPressed(_, key, _, _) =>
+        defaultKeyPress(key)
+        repaint()
+    }
   }
 
   def top = new MainFrame {
     title = "Gobstones Program"
-    contents = new TabbedPane {
-      before()
-      pages += new Page("Tablero Inicial", boardPanel(newBoardPanel()))
-      main()
-      pages += new Page("Resultado", boardPanel(newBoardPanel()))
-    }
+    contents = tabPanels
+    tabPanels.selection.index = 1
     resizable = true
     peer.setLocationRelativeTo(null)
   }

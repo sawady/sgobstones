@@ -9,7 +9,7 @@ trait Gobstones {
   val height: Int = 15 //new Random().nextInt(19) + 1
   type Board = Array[Array[Cell]]
 
-  @getter val board = makeBoard()
+  @getter var board = makeBoard()
   @getter var cursorX = 0
   @getter var cursorY = 0
 
@@ -28,8 +28,12 @@ trait Gobstones {
   def nroBolitas(c: Color) = current().nroBolitas(c)
   def hayBolitas(c: Color) = current().hayBolitas(c)
   def error(s: String) = throw new RuntimeException(s)
+  def reiniciar() = { 
+    board = makeBoard()
+    cursorX = 0
+    cursorY = 0
+  }
   
-  def before() {}
   def main()
 
   def mover(d: Dir) = {
@@ -82,7 +86,7 @@ trait Gobstones {
 
     def poner(c: Color) = cellInfo.update(c, cellInfo(c) + 1)
 
-    def sacar(c: Color) = if (nroBolitas(c) > 0) cellInfo.update(c, cellInfo(c) - 1) else throw new RuntimeException("No hay más bolitas de color " + c)
+    def sacar(c: Color) = if (nroBolitas(c) > 0) cellInfo.update(c, cellInfo(c) - 1) else error("No hay más bolitas de color " + c)
 
   }
 }
