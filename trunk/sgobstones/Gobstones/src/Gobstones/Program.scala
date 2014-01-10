@@ -95,7 +95,7 @@ trait Program extends SimpleSwingApplication with Gobstones {
   }
 
   private def newImageCell(s: String) = new Label() {
-    icon = new ImageIcon(s)
+    icon = new ImageIcon("resources/" + s + ".png")
   }
 
   private def newBoardPanel() = new GridPanel(height, width) {
@@ -192,8 +192,8 @@ trait Program extends SimpleSwingApplication with Gobstones {
       tabPanels.selection.index = 1
       tabPanels.pages.remove(0)
       resultPage.title = "Game"
-      ocultarCoordenadas()
-      verCodificaciones()
+      showCoords = false
+      codificaciones = true
       interactivo = true
     }
   }
