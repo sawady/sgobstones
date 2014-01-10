@@ -18,6 +18,8 @@ trait Gobstones {
   private def makeBoard(): Board = List.range(0, width).map(_ => makeColumn()).toArray
 
   private def current(): Cell = board(cursorX)(cursorY)
+  
+  def getCell(i: Int, j: Int): Cell = board(i)((height - 1) - j)
 
   /* Operaciones sobre el cabezal */
 
@@ -26,6 +28,8 @@ trait Gobstones {
   def nroBolitas(c: Color) = current().nroBolitas(c)
   def hayBolitas(c: Color) = current().hayBolitas(c)
   def error(s: String) = throw new RuntimeException(s)
+  
+  def before() {}
   def main()
 
   def mover(d: Dir) = {
