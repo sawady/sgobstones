@@ -9,7 +9,7 @@ class GameScene(@getter val width: Int, @getter val height: Int) {
   private val entities: MutableList[Entity] = MutableList()
 
   def addEntity(e: Entity) {
-    entities.+:(e)
+    entities += e
   }
 
   def makeWorld(): Array[Array[String]] = {
