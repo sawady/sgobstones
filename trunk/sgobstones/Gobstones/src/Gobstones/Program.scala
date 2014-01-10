@@ -1,11 +1,9 @@
 package Gobstones
 
 import java.awt.BasicStroke
-import java.awt.Color
 import java.awt.Graphics2D
 import java.awt.Rectangle
 import java.awt.RenderingHints
-
 import scala.swing.BorderPanel
 import scala.swing.BoxPanel
 import scala.swing.Dimension
@@ -19,12 +17,13 @@ import scala.swing.TabbedPane
 import scala.swing.TabbedPane.Page
 import scala.swing.event
 import scala.swing.event.KeyPressed
-
 import javax.swing.ImageIcon
 import javax.swing.border.LineBorder
+import java.awt.Color
 
 trait Program extends SimpleSwingApplication with Gobstones {
 
+  type RGBColor = java.awt.Color
   val Key = event.Key
 
   var interactivo = false
@@ -40,10 +39,10 @@ trait Program extends SimpleSwingApplication with Gobstones {
   val initialBoard = resultPanel()
 
   private def toSwingColor(c: Color): java.awt.Color = c match {
-    case Rojo => new java.awt.Color(242, 109, 109)
-    case Azul => new java.awt.Color(109, 114, 242)
-    case Negro => new java.awt.Color(161, 161, 161)
-    case Verde => new java.awt.Color(53, 175, 0)
+    case Rojo => new RGBColor(242, 109, 109)
+    case Azul => new RGBColor(109, 114, 242)
+    case Negro => new RGBColor(161, 161, 161)
+    case Verde => new RGBColor(53, 175, 0)
   }
 
   private def drawCursor(g: Graphics2D) = {
