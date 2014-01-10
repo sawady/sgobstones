@@ -2,10 +2,10 @@ package Gobstones
 
 object Codificaciones {
   
-  case class Codificacion(negro: Int, azul: Int, rojo: Int, verde: Int, recurso: String)
+  case class Codificacion(azul: Int, negro: Int, rojo: Int, verde: Int, recurso: String)
   
   def codificaciones(): List[Codificacion] = List(
-      Codificacion(0,0,0,0,"Empty")
+      Codificacion(0,0,0,10,"Grass")
   )
 
 }
