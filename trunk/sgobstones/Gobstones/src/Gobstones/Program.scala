@@ -5,7 +5,6 @@ import java.awt.Color
 import java.awt.Graphics2D
 import java.awt.Rectangle
 import java.awt.RenderingHints
-
 import scala.swing.BorderPanel
 import scala.swing.BoxPanel
 import scala.swing.Dimension
@@ -17,10 +16,13 @@ import scala.swing.Panel
 import scala.swing.SimpleSwingApplication
 import scala.swing.TabbedPane
 import scala.swing.TabbedPane.Page
-
 import javax.swing.border.LineBorder
+import javax.swing.ImageIcon
 
 trait Program extends SimpleSwingApplication with Gobstones {
+
+  var interactivo = false
+  var showCoords = true
 
   val windowSize = new Dimension(600, 600)
   val windowsWidth = windowSize.getWidth().toInt
@@ -41,39 +43,62 @@ trait Program extends SimpleSwingApplication with Gobstones {
     g.draw(new Rectangle(cursorX * cellWidth, cursorY * cellHeight, cellWidth, cellHeight))
   }
 
+  private def newGobstonesCell(i: Int, j: Int) = new GridPanel(2, 2) {
+    for (c <- colores()) {
+      val n = getCell(i, j).nroBolitas(c)
+      if (n > 0) {
+        contents += new Label(n.toString) {
+          foreground = Color.WHITE
+
+          override def paintComponent(g: Graphics2D) {
+            g.setColor(toSwingColor(c))
+            g.fillOval(0, 0, this.bounds.width - 1, this.bounds.height - 1)
+            super.paintComponent(g)
+            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+              RenderingHints.VALUE_ANTIALIAS_ON);
+            g.setColor(Color.BLACK)
+            g.drawOval(0, 0, this.bounds.width - 1, this.bounds.height - 1)
+          }
+        }
+      } else {
+        contents += new Label("")
+      }
+    }
+    if (cursorX == i && cursorY == (height - 1) - j) {
+      background = new java.awt.Color(255, 255, 224)
+      border = new LineBorder(new java.awt.Color(255, 165, 0), 3)
+    } else {
+      border = new LineBorder(Color.BLACK, 1)
+    }
+  }
+
+  private def checkCode(i: Int, j: Int): String = {
+    val a = getCell(i, j).nroBolitas(Azul)
+    val n = getCell(i, j).nroBolitas(Negro)
+    val r = getCell(i, j).nroBolitas(Rojo)
+    val v = getCell(i, j).nroBolitas(Verde)
+    for (c <- Codificaciones.codificaciones()) {
+      if (c.azul == a && c.negro == n && c.rojo == r && c.verde == v) {
+        return c.recurso
+      }
+    }
+    return ""
+  }
+
+  private def newImageCell(s: String) = new Label() {
+    icon = new ImageIcon(s)
+  }
+
   private def newBoardPanel() = new GridPanel(height, width) {
     background = Color.white
     preferredSize = windowSize
     focusable = true
     0 to height - 1 foreach { j =>
       0 to width - 1 foreach { i =>
-        contents += new GridPanel(2, 2) {
-          for (c <- colores()) {
-            val n = board(i)((height - 1) - j).nroBolitas(c)
-            if (n > 0) {
-              contents += new Label(n.toString) {
-                foreground = Color.WHITE
-
-                override def paintComponent(g: Graphics2D) {
-                  g.setColor(toSwingColor(c))
-                  g.fillOval(0, 0, this.bounds.width - 1, this.bounds.height - 1)
-                  super.paintComponent(g)
-                  g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                    RenderingHints.VALUE_ANTIALIAS_ON);
-                  g.setColor(Color.BLACK)
-                  g.drawOval(0, 0, this.bounds.width - 1, this.bounds.height - 1)
-                }
-              }
-            } else {
-              contents += new Label("")
-            }
-          }
-          if (cursorX == i && cursorY == (height - 1) - j) {
-            background = new java.awt.Color(255, 255, 224)
-            border = new LineBorder(new java.awt.Color(255, 165, 0), 3)
-          } else {
-            border = new LineBorder(Color.BLACK, 1)
-          }
+        if (interactivo) {
+          contents += newImageCell(checkCode(i, j))
+        } else {
+          contents += newGobstonesCell(i, j)
         }
       }
     }
@@ -121,21 +146,32 @@ trait Program extends SimpleSwingApplication with Gobstones {
 
   private def boardPanel(b: Panel) = {
     new BorderPanel() {
-      add(yLabels(), BorderPanel.Position.West)
-      add(new BoxPanel(Orientation.Horizontal) {
-        contents += corner()
-        contents += xLabels()
-        contents += corner()
-      }, BorderPanel.Position.South)
-      add(emptyGridEast(), BorderPanel.Position.East)
-      add(emptyGridNorth(), BorderPanel.Position.North)
+      if (showCoords) {
+        add(yLabels(), BorderPanel.Position.West)
+        add(new BoxPanel(Orientation.Horizontal) {
+          contents += corner()
+          contents += xLabels()
+          contents += corner()
+        }, BorderPanel.Position.South)
+        add(emptyGridEast(), BorderPanel.Position.East)
+        add(emptyGridNorth(), BorderPanel.Position.North)
+      }
       add(b, BorderPanel.Position.Center)
     }
+  }
+
+  def cambiarAInteractivo() {
+    interactivo = !interactivo
+  }
+
+  def mostrarCoordenadas(b: Boolean) {
+    showCoords = b
   }
 
   def top = new MainFrame {
     title = "Gobstones Program"
     contents = new TabbedPane {
+      before()
       pages += new Page("Tablero Inicial", boardPanel(newBoardPanel()))
       main()
       pages += new Page("Resultado", boardPanel(newBoardPanel()))
