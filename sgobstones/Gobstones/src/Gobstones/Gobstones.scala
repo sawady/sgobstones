@@ -50,33 +50,23 @@ trait Gobstones {
   }
 
   /* Estructuras de Control */
+  
+  def range(start: Int, end: Int): List[Int] = List.range(start, end)
 
   def repeat(n: Int)(block: => Unit): Unit = {
     List.range(0, n).foreach(_ => block)
   }
 
-  trait Color
-  case object Azul extends Color
-  case object Negro extends Color
-  case object Rojo extends Color
-  case object Verde extends Color
-
   def colores(): List[Color] = List(Negro, Azul, Verde, Rojo)
 
+  def direcciones(): List[Dir] = List(Norte, Este, Sur, Oeste)
+  
   def opuesto(d: Dir): Dir = d match {
     case Norte => Sur
     case Este => Oeste
     case Sur => Norte
     case Oeste => Este
-  }
-
-  trait Dir
-  case object Norte extends Dir
-  case object Sur extends Dir
-  case object Este extends Dir
-  case object Oeste extends Dir
-
-  def direcciones(): List[Dir] = List(Norte, Este, Sur, Oeste)
+  }  
 
   class Cell {
 

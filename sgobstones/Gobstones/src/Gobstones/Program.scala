@@ -4,6 +4,9 @@ import java.awt.BasicStroke
 import java.awt.Color
 import java.awt.Graphics2D
 import java.awt.Rectangle
+import java.awt.RenderingHints
+
+import scala.swing.BorderPanel
 import scala.swing.BoxPanel
 import scala.swing.Dimension
 import scala.swing.GridPanel
@@ -14,9 +17,8 @@ import scala.swing.Panel
 import scala.swing.SimpleSwingApplication
 import scala.swing.TabbedPane
 import scala.swing.TabbedPane.Page
+
 import javax.swing.border.LineBorder
-import scala.swing.BorderPanel
-import java.awt.RenderingHints
 
 trait Program extends SimpleSwingApplication with Gobstones {
 
