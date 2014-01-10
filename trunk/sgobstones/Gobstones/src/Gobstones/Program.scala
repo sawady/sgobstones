@@ -172,14 +172,18 @@ trait Program extends SimpleSwingApplication with Gobstones {
   def onKeyPress(key: Key.Value) {}
 
   def defaultKeyPress(key: Key.Value) {
-    println("Se presiono: " + key)
+    if (interactivo) {
+      println("Se presiono: " + key)
+    }
     key match {
       case Key.F10 => volverInteractivo()
       case Key.F11 => ocultarCoordenadas()
       case Key.F12 => verCodificaciones()
       case _ => {}
     }
-    onKeyPress(key)
+    if (interactivo) {
+      onKeyPress(key)
+    }
     resultPage.content = resultPanel()
   }
 
@@ -187,6 +191,7 @@ trait Program extends SimpleSwingApplication with Gobstones {
     if (!interactivo) {
       tabPanels.selection.index = 1
       tabPanels.pages.remove(0)
+      resultPage.title = "Game"
       ocultarCoordenadas()
       verCodificaciones()
       interactivo = true
