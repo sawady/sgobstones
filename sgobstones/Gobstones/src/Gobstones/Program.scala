@@ -24,6 +24,7 @@ import java.awt.Color
 trait Program extends SimpleSwingApplication with Gobstones {
 
   type RGBColor = java.awt.Color
+  type KeyValue = Key.Value 
   val Key = event.Key
 
   var interactivo = false
