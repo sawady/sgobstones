@@ -1,11 +1,9 @@
 package Gobstones
 
-import scala.swing.BorderPanel
-import scala.swing.MainFrame
-import scala.swing.event.KeyPressed
-import scala.swing.Panel
 import scala.swing.BoxPanel
+import scala.swing.MainFrame
 import scala.swing.Orientation
+import scala.swing.event.KeyPressed
 
 trait InteractiveProgram extends Program {
 
