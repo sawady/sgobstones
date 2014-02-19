@@ -2,11 +2,13 @@ package Gobstones
 
 import scala.annotation.meta.getter
 import scala.collection.mutable.Map
+import scala.util.Random
 
 trait Gobstones {
 
-  val width: Int = 15 //new Random().nextInt(19) + 1
-  val height: Int = 15 //new Random().nextInt(19) + 1
+  val width: Int = 10 // new Random().nextInt(15) + 1
+  val height: Int = 10 // width
+  val randomCells = false // true
   type Board = Array[Array[Cell]]
 
   @getter var board = makeBoard()
@@ -27,6 +29,7 @@ trait Gobstones {
   def sacar(c: Color) = current().sacar(c)
   def nroBolitas(c: Color) = current().nroBolitas(c)
   def hayBolitas(c: Color) = current().hayBolitas(c)
+  def not(b: Boolean): Boolean = !b
   def error(s: String) = throw new RuntimeException(s)
   def reiniciar() = { 
     board = makeBoard()
@@ -78,7 +81,8 @@ trait Gobstones {
 
   class Cell {
 
-    val cellInfo: Map[Color, Int] = Map(colores().map(c => (c, 0)): _*)
+    val cellInfo: Map[Color, Int] = Map(colores().map(c => (c, 
+    		if (randomCells) new Random().nextInt(25) else 0) ): _*)
 
     def nroBolitas(c: Color): Int = cellInfo(c)
 
