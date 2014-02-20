@@ -6,7 +6,7 @@ import scala.swing.Orientation
 import scala.swing.event.KeyPressed
 
 trait InteractiveProgram extends Program {
-
+  
   main()
 
   def onKeyPress(key: Key.Value)

@@ -27,12 +27,12 @@ trait Program extends SimpleSwingApplication with Gobstones {
   type KeyValue = Key.Value
   val Key = event.Key
 
-  val windowWidth = 600
-  val windowHeight = 600
+  private val windowWidth = 600
+  private val windowHeight = 600
 
-  val windowSize = new Dimension(windowWidth, windowHeight)
-  val cellWidth = windowWidth / width
-  val cellHeight = windowHeight / height
+  private val windowSize = new Dimension(windowWidth, windowHeight)
+  private val cellWidth = windowWidth / width
+  private val cellHeight = windowHeight / height
   
   var showCoords = true
 
@@ -129,7 +129,7 @@ trait Program extends SimpleSwingApplication with Gobstones {
     }
   }
 
-  protected def resultPanel() = {
+  protected def resultPanel(): BorderPanel = {
     new BorderPanel() {
       if (showCoords) {
         add(yLabels(), BorderPanel.Position.West)
