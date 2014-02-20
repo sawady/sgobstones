@@ -9,7 +9,9 @@ import scala.swing.Panel
 import scala.swing.BoxPanel
 import scala.swing.Orientation
 
-abstract class Game(gameName: String) extends InteractiveProgram {
+trait Game extends Program {
+  
+  main()
 
   var codificaciones = true
   showCoords = false
@@ -20,8 +22,8 @@ abstract class Game(gameName: String) extends InteractiveProgram {
 
   def ocultarCoordenadas() {
     showCoords = !showCoords
-  }  
-  
+  }
+
   private def checkCode(i: Int, j: Int): String = {
     val a = getCell(i, j).nroBolitas(Azul)
     val n = getCell(i, j).nroBolitas(Negro)
@@ -34,34 +36,51 @@ abstract class Game(gameName: String) extends InteractiveProgram {
     }
     return ""
   }
-  
+
   private def newImageCell(s: String) = new Label() {
     icon = new ImageIcon("resources/" + s + ".png")
-  }  
-  
+  }
+
   override def newGobstonesCell(i: Int, j: Int): scala.swing.Component = {
-    if(codificaciones)
-    {
+    if (codificaciones) {
       return newImageCell(checkCode(i, j))
     } else {
       return super.newGobstonesCell(i, j)
     }
   }
   
-  override def defaultKeyPress(key: Key.Value) {
+  def onKeyPress(key: Key.Value)
+
+  def defaultKeyPress(key: Key.Value) {
     key match {
       case Key.F11 => ocultarCoordenadas()
       case Key.F12 => verCodificaciones()
       case _       => {}
     }
-    super.defaultKeyPress(key)
+    onKeyPress(key)
+    buildMainPanel.contents.remove(0)
+    buildMainPanel.contents += resultPanel()
+    buildMainPanel.revalidate()
   }
   
-  override val mainPanel: scala.swing.MainFrame = new MainFrame {
-    title = gameName
+  val buildMainPanel = new BoxPanel(Orientation.Vertical) {
+    contents += resultPanel()
+    focusable = true
+    listenTo(keys)
+    reactions += {
+      case KeyPressed(_, key, _, _) =>
+        defaultKeyPress(key)
+        repaint()
+    }
+  }
+  
+  val mainPanel: scala.swing.MainFrame = new MainFrame {
+    title = "Game"
     contents = buildMainPanel
     resizable = true
     peer.setLocationRelativeTo(null)
   }
+  
+  def top = mainPanel
 
 }
