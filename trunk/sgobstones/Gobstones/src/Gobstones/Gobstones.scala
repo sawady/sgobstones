@@ -4,10 +4,10 @@ import scala.annotation.meta.getter
 import scala.collection.mutable.Map
 import scala.util.Random
 
-trait Gobstones {
+trait Gobstones extends CommonLanguage {
 
-  val width: Int = 10 // new Random().nextInt(15) + 1
-  val height: Int = 10 // width
+  val width: Int = 15 // new Random().nextInt(15) + 1
+  val height: Int = 15 // width
   val randomCells = false // true
   type Board = Array[Array[Cell]]
 
@@ -29,8 +29,6 @@ trait Gobstones {
   def sacar(c: Color) = current().sacar(c)
   def nroBolitas(c: Color) = current().nroBolitas(c)
   def hayBolitas(c: Color) = current().hayBolitas(c)
-  def not(b: Boolean): Boolean = !b
-  def error(s: String) = throw new RuntimeException(s)
   def reiniciar() = { 
     board = makeBoard()
     cursorX = 0
@@ -62,12 +60,6 @@ trait Gobstones {
 
   /* Estructuras de Control */
   
-  def range(start: Int, end: Int): List[Int] = List.range(start, end)
-
-  def repeat(n: Int)(block: => Unit): Unit = {
-    List.range(0, n).foreach(_ => block)
-  }
-
   def colores(): List[Color] = List(Negro, Azul, Verde, Rojo)
 
   def direcciones(): List[Dir] = List(Norte, Este, Sur, Oeste)
