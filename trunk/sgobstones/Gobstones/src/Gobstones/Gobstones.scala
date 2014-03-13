@@ -6,22 +6,19 @@ import scala.util.Random
 
 trait Gobstones extends CommonLanguage {
 
-  val width: Int = 15 // new Random().nextInt(15) + 1
-  val height: Int = 15 // width
-  val randomCells = false // true
   type Board = Array[Array[Cell]]
 
   @getter var board = makeBoard()
   @getter var cursorX = 0
   @getter var cursorY = 0
 
-  private def makeColumn(): Array[Cell] = List.range(0, height).map(_ => new Cell()).toArray
+  private def makeColumn(): Array[Cell] = List.range(0, Constantes.height).map(_ => new Cell()).toArray
 
-  private def makeBoard(): Board = List.range(0, width).map(_ => makeColumn()).toArray
+  private def makeBoard(): Board = List.range(0, Constantes.width).map(_ => makeColumn()).toArray
 
   private def current(): Cell = board(cursorX)(cursorY)
   
-  def getCell(i: Int, j: Int): Cell = board(i)((height - 1) - j)
+  def getCell(i: Int, j: Int): Cell = board(i)((Constantes.height - 1) - j)
 
   /* Operaciones sobre el cabezal */
 
@@ -51,9 +48,9 @@ trait Gobstones extends CommonLanguage {
 
   def puedeMover(d: Dir): Boolean = {
     d match {
-      case Norte => cursorY < height - 1
+      case Norte => cursorY < Constantes.height - 1
       case Sur => cursorY > 0
-      case Este => cursorX < width - 1
+      case Este => cursorX < Constantes.width - 1
       case Oeste => cursorX > 0
     }
   }
@@ -74,7 +71,7 @@ trait Gobstones extends CommonLanguage {
   class Cell {
 
     val cellInfo: Map[Color, Int] = Map(colores().map(c => (c, 
-    		if (randomCells) new Random().nextInt(25) else 0) ): _*)
+    		if (Constantes.randomCells) new Random().nextInt(25) else 0) ): _*)
 
     def nroBolitas(c: Color): Int = cellInfo(c)
 
