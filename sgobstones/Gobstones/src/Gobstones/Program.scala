@@ -27,12 +27,9 @@ trait Program extends SimpleSwingApplication with Gobstones {
   type KeyValue = Key.Value
   val Key = event.Key
 
-  private val windowWidth = 600
-  private val windowHeight = 600
-
-  private val windowSize = new Dimension(windowWidth, windowHeight)
-  private val cellWidth = windowWidth / width
-  private val cellHeight = windowHeight / height
+  private val windowSize = new Dimension(Constantes.windowWidth, Constantes.windowHeight)
+  private val cellWidth = Constantes.windowWidth / Constantes.width
+  private val cellHeight = Constantes.windowHeight / Constantes.height
   
   var showCoords = true
 
@@ -70,7 +67,7 @@ trait Program extends SimpleSwingApplication with Gobstones {
         contents += new Label("")
       }
     }
-    if (cursorX == i && cursorY == (height - 1) - j) {
+    if (cursorX == i && cursorY == (Constantes.height - 1) - j) {
       background = new java.awt.Color(255, 255, 224)
       border = new LineBorder(new java.awt.Color(255, 165, 0), 3)
     } else {
@@ -78,12 +75,12 @@ trait Program extends SimpleSwingApplication with Gobstones {
     }
   }
 
-  private def newBoardPanel() = new GridPanel(height, width) {
+  private def newBoardPanel() = new GridPanel(Constantes.height, Constantes.width) {
     background = Color.white
     preferredSize = windowSize
     focusable = true
-    0 to height - 1 foreach { j =>
-      0 to width - 1 foreach { i =>
+    0 to Constantes.height - 1 foreach { j =>
+      0 to Constantes.width - 1 foreach { i =>
         contents += newGobstonesCell(i, j)
       }
     }
@@ -93,36 +90,36 @@ trait Program extends SimpleSwingApplication with Gobstones {
     preferredSize = new Dimension(cellWidth, cellHeight)
   }
 
-  private def yLabels() = new GridPanel(height, 1) {
-    preferredSize = new Dimension(cellWidth, windowHeight)
-    for (i <- 0 to height - 1) {
-      contents += new Label((height - 1 - i).toString) {
+  private def yLabels() = new GridPanel(Constantes.height, 1) {
+    preferredSize = new Dimension(cellWidth, Constantes.windowHeight)
+    for (i <- 0 to Constantes.height - 1) {
+      contents += new Label((Constantes.height - 1 - i).toString) {
         preferredSize = new Dimension(cellWidth, cellHeight)
       }
     }
   }
 
-  private def xLabels() = new GridPanel(1, width) {
-    preferredSize = new Dimension(windowWidth, cellHeight)
-    for (i <- 0 to width - 1) {
+  private def xLabels() = new GridPanel(1, Constantes.width) {
+    preferredSize = new Dimension(Constantes.windowWidth, cellHeight)
+    for (i <- 0 to Constantes.width - 1) {
       contents += new Label(i.toString) {
         preferredSize = new Dimension(cellWidth, cellHeight)
       }
     }
   }
 
-  private def emptyGridEast() = new GridPanel(height, 1) {
-    preferredSize = new Dimension(cellWidth, windowHeight)
-    for (i <- 0 to height - 1) {
+  private def emptyGridEast() = new GridPanel(Constantes.height, 1) {
+    preferredSize = new Dimension(cellWidth, Constantes.windowHeight)
+    for (i <- 0 to Constantes.height - 1) {
       contents += new Panel() {
         preferredSize = new Dimension(cellWidth, cellHeight)
       }
     }
   }
 
-  private def emptyGridNorth() = new GridPanel(1, width) {
-    preferredSize = new Dimension(windowWidth, cellHeight)
-    for (i <- 0 to width - 1) {
+  private def emptyGridNorth() = new GridPanel(1, Constantes.width) {
+    preferredSize = new Dimension(Constantes.windowWidth, cellHeight)
+    for (i <- 0 to Constantes.width - 1) {
       contents += new Panel() {
         preferredSize = new Dimension(cellWidth, cellHeight)
       }

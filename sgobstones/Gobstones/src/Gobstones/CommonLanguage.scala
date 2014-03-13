@@ -1,7 +1,7 @@
 package Gobstones
 
 trait CommonLanguage {
-
+  
   def not(b: Boolean): Boolean = !b
   def error(s: String) = throw new RuntimeException(s)
   
