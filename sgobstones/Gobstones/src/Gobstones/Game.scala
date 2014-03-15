@@ -14,8 +14,8 @@ trait Game extends Program {
   def render()
   def always()
   
-  var codificaciones = true
-  showCoords = false
+  var codificaciones = Constantes.codificaciones
+  showCoords = Constantes.showCoords
   
   def verCodificaciones() {
     codificaciones = !codificaciones
