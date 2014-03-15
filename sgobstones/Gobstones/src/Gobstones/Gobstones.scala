@@ -32,8 +32,6 @@ trait Gobstones extends CommonLanguage {
     cursorY = 0
   }
   
-  def main()
-
   def mover(d: Dir) = {
     if (!puedeMover(d)) {
       throw new RuntimeException("No es posible moverse hacia la dirección: " + d)

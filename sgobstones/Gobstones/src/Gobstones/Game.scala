@@ -11,8 +11,9 @@ import scala.swing.Orientation
 
 trait Game extends Program {
   
-  main()
-
+  def render()
+  def always()
+  
   var codificaciones = true
   showCoords = false
   
@@ -52,12 +53,14 @@ trait Game extends Program {
   def onKeyPress(key: Key.Value)
 
   def defaultKeyPress(key: Key.Value) {
+    always()
     key match {
       case Key.F11 => ocultarCoordenadas()
       case Key.F12 => verCodificaciones()
       case _       => {}
     }
     onKeyPress(key)
+    render()
     buildMainPanel.contents.remove(0)
     buildMainPanel.contents += resultPanel()
     buildMainPanel.revalidate()

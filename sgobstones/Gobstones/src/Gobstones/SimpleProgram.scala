@@ -12,6 +12,8 @@ trait SimpleProgram extends Program {
   
   main()
   
+  def main()
+  
   val initialPage = new Page("Tablero Inicial", initialBoard)
   val resultPage  = new Page("Tablero Final", resultPanel())
   val tabsPanel   = new TabbedPane {
