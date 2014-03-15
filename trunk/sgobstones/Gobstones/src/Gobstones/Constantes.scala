@@ -6,6 +6,9 @@ object Constantes {
   val height: Int = 10 // width
   val randomCells = false // true
   
+  val codificaciones = false
+  val showCoords = true
+  
   val windowWidth = 600
   val windowHeight = 600
 
