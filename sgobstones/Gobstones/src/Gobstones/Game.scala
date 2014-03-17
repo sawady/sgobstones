@@ -8,15 +8,18 @@ import scala.swing.event.KeyPressed
 import scala.swing.Panel
 import scala.swing.BoxPanel
 import scala.swing.Orientation
+import java.awt.Dimension
 
 trait Game extends Program {
-  
+
   def render()
   def always()
   
+  var running = false
+
   var codificaciones = Constantes.codificaciones
   showCoords = Constantes.showCoords
-  
+
   def verCodificaciones() {
     codificaciones = !codificaciones
   }
@@ -49,23 +52,48 @@ trait Game extends Program {
       return super.newGobstonesCell(i, j)
     }
   }
-  
-  def onKeyPress(key: Key.Value)
 
-  def defaultKeyPress(key: Key.Value) {
-    always()
-    key match {
-      case Key.F11 => ocultarCoordenadas()
-      case Key.F12 => verCodificaciones()
-      case _       => {}
-    }
-    onKeyPress(key)
+  def onKeyPress(key: Key.Value)
+  
+  def defaultRender() {
     render()
     buildMainPanel.contents.remove(0)
     buildMainPanel.contents += resultPanel()
     buildMainPanel.revalidate()
   }
   
+  def defaultAlways()
+  {
+    always()
+  }
+
+  def defaultKeyPress(key: Key.Value) {
+    if(!running) {
+      running = true
+      Timer(1000/60)(defaultRender)
+      Timer(100)(defaultAlways)
+    }
+    key match {
+      case Key.F11 => ocultarCoordenadas()
+      case Key.F12 => verCodificaciones()
+      case _ => {}
+    }
+    onKeyPress(key)
+  }
+  
+  override def resultPanel(): BorderPanel = {
+    if(!running) {
+      val l = new Label("Press ANY KEY to Start")
+      val b = new BorderPanel() {
+        add(l, BorderPanel.Position.Center)
+        preferredSize = new Dimension(Constantes.windowWidth, Constantes.windowHeight)
+      }
+      return b
+    } else {
+      return super.resultPanel()
+    }
+  }
+
   val buildMainPanel = new BoxPanel(Orientation.Vertical) {
     contents += resultPanel()
     focusable = true
@@ -76,14 +104,25 @@ trait Game extends Program {
         repaint()
     }
   }
-  
+
   val mainPanel: scala.swing.MainFrame = new MainFrame {
     title = "Game"
     contents = buildMainPanel
     resizable = true
     peer.setLocationRelativeTo(null)
   }
-  
+
   def top = mainPanel
+
+  object Timer {
+    def apply(interval: Int, repeats: Boolean = true)(op: => Unit) {
+      val timeOut = new javax.swing.AbstractAction() {
+        def actionPerformed(e: java.awt.event.ActionEvent) = op
+      }
+      val t = new javax.swing.Timer(interval, timeOut)
+      t.setRepeats(repeats)
+      t.start()
+    }
+  }
 
 }
