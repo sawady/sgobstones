@@ -34,7 +34,7 @@ trait Gobstones extends CommonLanguage {
   
   def mover(d: Dir) = {
     if (!puedeMover(d)) {
-      throw new RuntimeException("No es posible moverse hacia la dirección: " + d)
+      throw new RuntimeException("No es posible moverse hacia la direccion: " + d)
     }
     d match {
       case Norte => cursorY += 1
@@ -77,7 +77,7 @@ trait Gobstones extends CommonLanguage {
 
     def poner(c: Color) = cellInfo.update(c, cellInfo(c) + 1)
 
-    def sacar(c: Color) = if (nroBolitas(c) > 0) cellInfo.update(c, cellInfo(c) - 1) else error("No hay más bolitas de color " + c)
+    def sacar(c: Color) = if (nroBolitas(c) > 0) cellInfo.update(c, cellInfo(c) - 1) else error("No hay mas bolitas de color " + c)
 
   }
 }
