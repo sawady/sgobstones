@@ -19,11 +19,11 @@ import scala.swing.event
 import scala.swing.event.KeyPressed
 import javax.swing.ImageIcon
 import javax.swing.border.LineBorder
-import java.awt.Color
 
 trait Program extends SimpleSwingApplication with Gobstones {
-
-  type RGBColor = java.awt.Color
+  
+  import java.awt.{Color => RGBColor}
+  
   type KeyValue = Key.Value
   val Key = event.Key
 
@@ -42,7 +42,7 @@ trait Program extends SimpleSwingApplication with Gobstones {
 
   private def drawCursor(g: Graphics2D) = {
     g.setStroke(new BasicStroke(2.0f))
-    g.setColor(Color.red)
+    g.setColor(RGBColor.red)
     g.draw(new Rectangle(cursorX * cellWidth, cursorY * cellHeight, cellWidth, cellHeight))
   }
 
@@ -51,7 +51,7 @@ trait Program extends SimpleSwingApplication with Gobstones {
       val n = getCell(i, j).nroBolitas(c)
       if (n > 0) {
         contents += new Label(n.toString) {
-          foreground = Color.WHITE
+          foreground = RGBColor.WHITE
 
           override def paintComponent(g: Graphics2D) {
             g.setColor(toSwingColor(c))
@@ -59,7 +59,7 @@ trait Program extends SimpleSwingApplication with Gobstones {
             super.paintComponent(g)
             g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
               RenderingHints.VALUE_ANTIALIAS_ON);
-            g.setColor(Color.BLACK)
+            g.setColor(java.awt.Color.BLACK)
             g.drawOval(0, 0, this.bounds.width - 1, this.bounds.height - 1)
           }
         }
@@ -68,15 +68,15 @@ trait Program extends SimpleSwingApplication with Gobstones {
       }
     }
     if (cursorX == i && cursorY == (Constantes.height - 1) - j) {
-      background = new java.awt.Color(255, 255, 224)
+      background = new RGBColor(255, 255, 224)
       border = new LineBorder(new java.awt.Color(255, 165, 0), 3)
     } else {
-      border = new LineBorder(Color.BLACK, 1)
+      border = new LineBorder(java.awt.Color.BLACK, 1)
     }
   }
 
   private def newBoardPanel() = new GridPanel(Constantes.height, Constantes.width) {
-    background = Color.white
+    background = RGBColor.white
     preferredSize = windowSize
     focusable = true
     0 to Constantes.height - 1 foreach { j =>
