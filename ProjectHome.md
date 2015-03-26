@@ -1,0 +1,1 @@
+SGobstones, versión de Gobstones para Scala
